@@ -7,7 +7,7 @@ module.exports = {
 };
 
 // Database Name
-const dbName = "duello_db";
+const dbName = "duelloDB";
 
 var dbConn = null;
 
