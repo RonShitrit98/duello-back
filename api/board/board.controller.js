@@ -5,7 +5,7 @@ const boardService = require("./board.service");
 
 async function getBoards(req, res) {
   try {
-    // const filterBy = {id: userId}
+    console.log(req.query);
     const boards = await boardService.query(req.query);
     res.send(boards);
   } catch (err) {

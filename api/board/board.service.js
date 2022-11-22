@@ -1,3 +1,4 @@
+const { filter } = require("mongodb/lib/core/connection/logger");
 const dbService = require("../../services/db.service");
 const ObjectId = require("mongodb").ObjectId;
 
@@ -14,6 +15,14 @@ async function query(filterBy = {}) {
     const criteria = _filterBoards(filterBy);
     const collection = await dbService.getCollection("board");
     const boards = await collection.find(criteria).toArray();
+    if (filterBy.userId) {
+      const filteredBoards = [];
+      boards.forEach((board) => {
+        if (board.members.find((member) => member._id === filterBy.userId))
+          filteredBoards.push(board);
+      });
+      return filteredBoards;
+    }
     return boards;
   } catch (err) {
     console.log(err);
@@ -63,7 +72,7 @@ async function update(board) {
     delete board._id;
     const collection = await dbService.getCollection("board");
     await collection.updateOne({ _id: id }, { $set: { ...board } });
-    board._id = id
+    board._id = id;
     return board;
   } catch (err) {
     logger.error("cannot update board", err);
@@ -73,9 +82,9 @@ async function update(board) {
 
 function _filterBoards(filterBy) {
   let filteredBoards = {};
-  if (filterBy.userId) {
-    filteredBoards.createdBy._id = filterBy.userId;
-  }
+  // if (filterBy.userId) {
+  //   filteredBoards.createdBy._id = filterBy.userId;
+  // }
 
   // filter by name
   //   const regex = new RegExp(filterBy.name, "i");
