@@ -2,7 +2,7 @@ const authService = require("./auth.service");
 const logger = require("../../services/logger.service");
 
 async function login(req, res) {
-  console.log(req.body)
+  console.log(req.body);
   const { username, password } = req.body;
   try {
     const user = await authService.login(username, password);
@@ -20,7 +20,12 @@ async function signup(req, res) {
     const { username, password, fullname, imgUrl } = req.body;
     // Never log passwords
     // logger.debug(fullname + ', ' + username + ', ' + password)
-    const account = await authService.signup(username, password, fullname, imgUrl);
+    const account = await authService.signup(
+      username,
+      password,
+      fullname,
+      imgUrl
+    );
     logger.debug(
       `auth.route - new account created: ` + JSON.stringify(account)
     );
@@ -51,9 +56,27 @@ async function loadUser(req, res) {
   } catch {}
 }
 
+async function googleSignup(req, res) {
+  try{
+
+    const user = {
+      username: req.email,
+      fullname: `${req.given_name} ${req.family_name}`,
+      imgUrl: req.picture,
+    };
+    const account = await authService.googleSignup(user);
+    console.log(req.session)
+    // req.session.user = account;
+    res.send(account);
+  }catch(err){
+    console.log(err)
+  }
+}
+
 module.exports = {
   loadUser,
   login,
   signup,
   logout,
+  googleSignup,
 };

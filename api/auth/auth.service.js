@@ -39,7 +39,22 @@ async function signup(username, password, fullname, imgUrl) {
   return userService.add({ username, password: hash, fullname, imgUrl });
 }
 
+async function googleSignup(user) {
+  const userExist = await userService.getByUsername(user.username);
+  if (userExist) return googleLogin(user);
+  return userService.add(user);
+}
+
+async function googleLogin(user) {
+  try {
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   signup,
   login,
+  googleSignup,
 };

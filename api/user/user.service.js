@@ -79,7 +79,7 @@ async function update(user) {
       _id: ObjectId(user._id), // needed for the returnd obj
       username: user.username,
       fullname: user.fullname,
-      imgUrl: user.imgUrl
+      imgUrl: user.imgUrl,
     };
     const collection = await dbService.getCollection("user");
     await collection.updateOne({ _id: userToSave._id }, { $set: userToSave });
@@ -92,16 +92,16 @@ async function update(user) {
 
 async function add(user) {
   try {
-    // peek only updatable fields!
-    const userToAdd = {
-      username: user.username,
-      password: user.password,
-      fullname: user.fullname,
-      imgUrl: user.imgUrl
-    };
+    // // peek only updatable fields!
+    // const userToAdd = {
+    //   username: user.username,
+    //   password: user.password,
+    //   fullname: user.fullname,
+    //   imgUrl: user.imgUrl
+    // };
     const collection = await dbService.getCollection("user");
-    await collection.insertOne(userToAdd);
-    return userToAdd;
+    await collection.insertOne(user);
+    return user;
   } catch (err) {
     logger.error("cannot insert user", err);
     throw err;

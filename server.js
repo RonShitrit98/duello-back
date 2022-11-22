@@ -13,7 +13,7 @@ const session = expressSession({
   saveUninitialized: true,
   // cookie: { secure: false },
 });
-app.use(express.json({ limit: '25mb' }));
+app.use(express.json({ limit: "25mb" }));
 app.use(session);
 
 if (process.env.NODE_ENV === "production") {
@@ -38,6 +38,7 @@ const userRoutes = require("./api/user/user.routes");
 const boardRoutes = require("./api/board/board.routes");
 const giphyRoutes = require("./api/giphy/giphy.routes");
 const imgRoutes = require("./api/img/img.routes");
+const googleRoutes = require("./api/google/google.routes");
 const { connectSockets } = require("./services/socket.service");
 
 // routes
@@ -49,6 +50,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/board", boardRoutes);
 app.use("/api/giphy", giphyRoutes);
 app.use("/api/img", imgRoutes);
+app.use("/api/google", googleRoutes);
 connectSockets(http, session);
 
 // Make every server-side-route to match the index.html
