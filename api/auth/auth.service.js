@@ -41,16 +41,11 @@ async function signup(username, password, fullname, imgUrl) {
 
 async function googleSignup(user) {
   const userExist = await userService.getByUsername(user.username);
-  if (userExist) return googleLogin(user);
-  return userService.add(user);
-}
-
-async function googleLogin(user) {
-  try {
-    
-  } catch (error) {
-    console.log(error);
+  if (userExist) {
+    delete userExist.password;
+    return userExist;
   }
+  return userService.add(user);
 }
 
 module.exports = {

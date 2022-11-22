@@ -51,32 +51,14 @@ async function logout(req, res) {
 
 async function loadUser(req, res) {
   try {
-    console.log(req.session);
     res.json(req.session.user);
   } catch {}
 }
 
-async function googleSignup(req, res) {
-  try{
-
-    const user = {
-      username: req.email,
-      fullname: `${req.given_name} ${req.family_name}`,
-      imgUrl: req.picture,
-    };
-    const account = await authService.googleSignup(user);
-    console.log(req.session)
-    // req.session.user = account;
-    res.send(account);
-  }catch(err){
-    console.log(err)
-  }
-}
 
 module.exports = {
   loadUser,
   login,
   signup,
   logout,
-  googleSignup,
 };
