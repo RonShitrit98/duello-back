@@ -23,7 +23,7 @@ async function login(username, password) {
 //     await signup('mumu', '123', 'Mumu Maha')
 // })()
 
-async function signup(username, password, fullname) {
+async function signup(username, password, fullname, imgUrl) {
   const saltRounds = 10;
 
   logger.debug(
@@ -36,7 +36,7 @@ async function signup(username, password, fullname) {
   if (userExist) return Promise.reject("Username already taken");
 
   const hash = await bcrypt.hash(password, saltRounds);
-  return userService.add({ username, password: hash, fullname });
+  return userService.add({ username, password: hash, fullname, imgUrl });
 }
 
 module.exports = {
