@@ -33,24 +33,21 @@ function connectSockets(http, session) {
     });
 
     socket.on("loading", (task) => {
-      gIo.to(socket.myTopic).emit('loading', task)
-    })
+      gIo.to(socket.myTopic).emit("loading", task);
+    });
     socket.on("update", (board) => {
-      console.log(socket.userId);
-      gIo.to(socket.myBoard).emit('update', board, socket.userId)
+      socket.broadcast.emit("updateBoard", board);
+      // gIo.to(socket.myBoard).emit('updateBoard', board, socket.userId)
       // broadcast({ type: 'update', data: board, room: socket.myBoard, userId: socket.userId })
+    });
 
-    })
-
-    socket.on('set-user-socket', userId => {
-      logger.debug(`Setting (${socket.id}) socket.userId = ${userId}`)
-      socket.userId = userId
-    })
-    socket.on('unset-user-socket', () => {
-      delete socket.userId
-    })
-
-
+    socket.on("set-user-socket", (userId) => {
+      logger.debug(`Setting (${socket.id}) socket.userId = ${userId}`);
+      socket.userId = userId;
+    });
+    socket.on("unset-user-socket", () => {
+      delete socket.userId;
+    });
   });
 }
 
@@ -73,7 +70,7 @@ async function emitToUser({ type, data, userId }) {
 async function broadcast({ type, data, room = null, userId }) {
   const excludedSocket = await _getUserSocket(userId);
   if (!excludedSocket) {
-    logger.debug('Shouldnt happen, socket not found')
+    logger.debug("Shouldnt happen, socket not found");
     // _printSockets();
     return;
   }
