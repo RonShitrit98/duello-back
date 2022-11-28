@@ -4,17 +4,21 @@ const authService = require("../auth/auth.service");
 // const logger = require('../../services/logger.service')
 
 async function getOauthToken(req, res) {
-  const code = req.query.code;
-  const { id_token, access_token } = await googleService.getOauthToken(code);
-  const user = await googleService.getGoogleUser(id_token, access_token);
-  const u = {
-    username: user.email,
-    fullname: `${user.given_name} ${user.family_name}`,
-    imgUrl: user.picture,
-  };
-  const account = await authService.googleSignup(u);
-  req.session.user = account;
-  res.redirect('https://duello.onrender.com/');
+  try {
+    const code = req.query.code;
+    const { id_token, access_token } = await googleService.getOauthToken(code);
+    const user = await googleService.getGoogleUser(id_token, access_token);
+    const u = {
+      username: user.email,
+      fullname: `${user.given_name} ${user.family_name}`,
+      imgUrl: user.picture,
+    };
+    const account = await authService.googleSignup(u);
+    req.session.user = account;
+    res.redirect("https://duello.onrender.com/");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {
