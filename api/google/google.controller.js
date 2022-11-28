@@ -14,7 +14,7 @@ async function getOauthToken(req, res) {
   };
   const account = await authService.googleSignup(u);
   req.session.user = account;
-  res.redirect('http://127.0.0.1:5173/');
+  res.redirect('https://duello.onrender.com/');
 }
 
 module.exports = {
